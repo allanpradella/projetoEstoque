@@ -1,0 +1,94 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #2C2C2C; /* Cor de fundo escura */
+    margin: 0;
+    padding: 20px;
+    color: #EAEAEA; /* Texto claro para contraste */
+}
+
+h1 {
+    color: #FFD700; /* Dourado */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #B0B0B0; /* Cinza claro */
+    border-bottom: 2px solid #FFD700;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.categoria {
+    background: #3A3A3A; /* Fundo das categorias */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    margin-bottom: 20px;
+    padding: 15px;
+}
+
+.produto {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+label {
+    font-size: 16px;
+}
+
+input[type="checkbox"], input[type="number"] {
+    margin-left: 10px;
+    accent-color: #FFD700; /* Para navegadores que suportam */
+}
+
+button {
+    background-color: #FFD700; /* Dourado */
+    color: #2C2C2C; /* Cor escura para o texto */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    margin: 5px;
+}
+
+button:hover {
+    background-color: #FFC300; /* Dourado mais claro ao passar o mouse */
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #555; /* Borda cinza escura */
+    border-radius: 5px;
+    resize: none;
+    font-size: 14px;
+    background-color: #3A3A3A; /* Fundo escuro */
+    color: #EAEAEA; /* Texto claro */
+}
+
+#copy-report {
+    background-color: #5CBB5C; /* Verde escuro */
+}
+
+#copy-report:hover {
+    background-color: #4DAE4D; /* Verde mais claro ao passar o mouse */
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    
+    button {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    textarea {
+        font-size: 12px;
+    }
+}
