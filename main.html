@@ -1,21 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-    <link rel="stylesheet" href="styles.css">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Compras</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h1 { color: #333; }
-        .categoria { margin-bottom: 20px; }
-        .produto { margin-bottom: 10px; }
-        button { margin-top: 20px; }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Lista de Compras - <span id="currentDay"></span></h1>
+    
+    <header>
+        <img src="logo.png" alt="Logo" id="logo">
+        <h1>Lista de Compras - <span id="currentDay"></span></h1>
+    </header>
     <div id="product-list"></div>
     <button id="generate-report">Gerar Relatório</button>
     <textarea id="report" rows="10" cols="50" placeholder="O relatório será gerado aqui..." readonly></textarea>
@@ -47,10 +44,8 @@
             "Terça-feira": [
                 { category: "Produtos", products: [
                     { name: "Sacos Viagem", requiresCheck: true },
-                    { name: "Sorvetes", requiresQuantity: true },
                     { name: "Etiquetas", requiresCheck: true },
                     { name: "Biquinho", requiresCheck: true },
-                    { name: "Veganos", requiresQuantity: true },
                     { name: "Pote Maionese", requiresCheck: true },
                     { name: "Guardanapo Embalado", requiresCheck: true },
                     { name: "Brownie", requiresCheck: true },
@@ -59,6 +54,14 @@
                     { name: "Gás", requiresCheck: true },
                     { name: "Bobina de Impressora", requiresCheck: true },
                     { name: "Gás de Maçarico", requiresCheck: true }
+                ]},
+                { category: "Sorvetes", products: [
+                    { name: "Chocolate", requiresQuantity: true },
+                    { name: "Creme", requiresQuantity: true }
+                ]},
+                { category: "Veganos", products: [
+                    { name: "Feijão", requiresQuantity: true },
+                    { name: "Lentilha", requiresQuantity: true }
                 ]}
             ],
             "Quarta-feira": [
@@ -241,59 +244,95 @@
             }
         }
 
-        document.getElementById('generate-report').onclick = () => {
-            const day = document.getElementById('currentDay').innerText;
-            let report = `${day} 📄\n\n`;
+            // Gerar relatório e sua formatação
 
-            // Adiciona produtos do dia específico
-            if (productsByDay[day]) {
-                for (const category of productsByDay[day]) {
-                    report += `${category.category}:\n`;
-                    for (const product of category.products) {
+            document.getElementById('generate-report').onclick = () => {
+                const day = document.getElementById('currentDay').innerText;
+                let report = `${day} 📄\n\n`;
+            
+                const categoryEmojis = {
+                    "Produtos": "🛒",
+                    "Diário": "🍅",
+                    "Carnes": "🥩",
+                    "Pães": "🥖",
+                    "Veganos": "🌱",
+                    "Sorvetes": "🍦",
+                    // Adicione outros emojis conforme necessário
+                };
+            
+                // Adiciona produtos do dia específico
+                if (productsByDay[day]) {
+                    for (const category of productsByDay[day]) {
+                        const checkedProducts = [];
+                        const quantityProducts = [];
+            
+                        for (const product of category.products) {
+                            const checkbox = document.querySelector(`input[type="checkbox"][name="${product.name}"]`);
+                            const quantityInput = document.querySelector(`input[type="number"][name="${product.name}"]`);
+            
+                            if (product.requiresCheck && checkbox.checked) {
+                                checkedProducts.push(`* ${product.name}`);
+                            } else if (product.requiresQuantity) {
+                                const quantity = quantityInput.value;
+                                if (quantity) {
+                                    quantityProducts.push(`* ${product.name}: (${quantity})`);
+                                }
+                            }
+                        }
+            
+                        if (checkedProducts.length > 0 || quantityProducts.length > 0) {
+                            report += `**${category.category}** ${categoryEmojis[category.category] || ''}\n`;
+                            if (checkedProducts.length > 0) {
+                                report += `${checkedProducts.join('\n')}\n`;
+                            }
+                            if (quantityProducts.length > 0) {
+                                report += `${quantityProducts.join('\n')}\n`;
+                            }
+                            report += '\n';
+                        }
+                    }
+                }
+            
+                // Adiciona categorias comuns (Diário, Carnes e Pães)
+                for (const commonCategory of commonCategories) {
+                    const checkedProducts = [];
+                    const quantityProducts = [];
+            
+                    for (const product of commonCategory.products) {
                         const checkbox = document.querySelector(`input[type="checkbox"][name="${product.name}"]`);
                         const quantityInput = document.querySelector(`input[type="number"][name="${product.name}"]`);
-
+            
                         if (product.requiresCheck && checkbox.checked) {
-                            report += `* ${product.name}\n`;
+                            checkedProducts.push(`* ${product.name}`);
                         } else if (product.requiresQuantity) {
                             const quantity = quantityInput.value;
                             if (quantity) {
-                                report += `* ${product.name}: (${quantity})\n`;
+                                quantityProducts.push(`* ${product.name}: (${quantity})`);
                             }
                         }
                     }
-                    report += '\n';
-                }
-            }
-
-            // Adiciona categorias comuns (Diário, Carnes e Pães)
-            for (const commonCategory of commonCategories) {
-                report += `${commonCategory.category}:\n`;
-                for (const product of commonCategory.products) {
-                    const checkbox = document.querySelector(`input[type="checkbox"][name="${product.name}"]`);
-                    const quantityInput = document.querySelector(`input[type="number"][name="${product.name}"]`);
-
-                    if (product.requiresCheck && checkbox.checked) {
-                        report += `* ${product.name}\n`;
-                    } else if (product.requiresQuantity) {
-                        const quantity = quantityInput.value;
-                        if (quantity) {
-                            report += `* ${product.name}: (${quantity})\n`;
+            
+                    if (checkedProducts.length > 0 || quantityProducts.length > 0) {
+                        report += `**${commonCategory.category}** ${categoryEmojis[commonCategory.category] || ''}\n`;
+                        if (checkedProducts.length > 0) {
+                            report += `${checkedProducts.join('\n')}\n`;
                         }
+                        if (quantityProducts.length > 0) {
+                            report += `${quantityProducts.join('\n')}\n`;
+                        }
+                        report += '\n';
                     }
                 }
-                report += '\n';
-            }
-
-            document.getElementById('report').value = report;
-        };
-
-        document.getElementById('copy-report').onclick = () => {
-            const reportTextArea = document.getElementById('report');
-            reportTextArea.select();
-            document.execCommand('copy');
-            alert('Relatório copiado para o clipboard!');
-        };
+            
+                document.getElementById('report').value = report;
+            };
+            
+            document.getElementById('copy-report').onclick = () => {
+                const reportTextArea = document.getElementById('report');
+                reportTextArea.select();
+                document.execCommand('copy');
+                alert('Relatório copiado para o clipboard!');
+            };            
 
         // Renderiza os produtos para o dia atual ao carregar a página
         const currentDay = getCurrentDay();

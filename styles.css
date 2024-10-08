@@ -1,26 +1,37 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #2C2C2C; /* Cor de fundo escura */
+    background-color: #000000; /* Cor de fundo preto */
     margin: 0;
     padding: 20px;
     color: #EAEAEA; /* Texto claro para contraste */
 }
 
-h1 {
-    color: #FFD700; /* Dourado */
+header {
     text-align: center;
     margin-bottom: 20px;
 }
 
+#logo {
+    display: block;
+    margin: 0 auto 20px;
+    width: 150px; /* Ajuste o tamanho conforme necessário */
+    height: auto; /* Mantém a proporção */
+}
+
+h1 {
+    color: #FFD700; /* Amarelo */
+    margin-bottom: 10px;
+}
+
 h2 {
-    color: #B0B0B0; /* Cinza claro */
+    color: #FFD700; /* Amarelo */
     border-bottom: 2px solid #FFD700;
     padding-bottom: 5px;
     margin-bottom: 10px;
 }
 
 .categoria {
-    background: #3A3A3A; /* Fundo das categorias */
+    background: #2A2A2A; /* Fundo das categorias em cinza escuro */
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     margin-bottom: 20px;
@@ -36,6 +47,7 @@ h2 {
 
 label {
     font-size: 16px;
+    color: #EAEAEA; /* Texto claro */
 }
 
 input[type="checkbox"], input[type="number"] {
@@ -44,8 +56,8 @@ input[type="checkbox"], input[type="number"] {
 }
 
 button {
-    background-color: #FFD700; /* Dourado */
-    color: #2C2C2C; /* Cor escura para o texto */
+    background-color: #FFD700; /* Amarelo */
+    color: #000000; /* Preto para o texto */
     border: none;
     border-radius: 5px;
     padding: 10px 15px;
@@ -56,7 +68,7 @@ button {
 }
 
 button:hover {
-    background-color: #FFC300; /* Dourado mais claro ao passar o mouse */
+    background-color: #FFC300; /* Amarelo mais claro ao passar o mouse */
 }
 
 textarea {
@@ -66,7 +78,7 @@ textarea {
     border-radius: 5px;
     resize: none;
     font-size: 14px;
-    background-color: #3A3A3A; /* Fundo escuro */
+    background-color: #2A2A2A; /* Fundo escuro */
     color: #EAEAEA; /* Texto claro */
 }
 
