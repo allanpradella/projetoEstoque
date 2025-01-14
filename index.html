@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Compras</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -14,9 +14,9 @@
         <h1>Lista de Compras - <span id="currentDay"></span></h1>
     </header>
     <div id="product-list"></div>
-    <button id="generate-report">Gerar Relatório</button>
+    <button id="generate-report">GERAR RELATÓRIO</button>
     <textarea id="report" rows="10" cols="50" placeholder="O relatório será gerado aqui..." readonly></textarea>
-    <button id="copy-report">Copiar Relatório</button>
+    <button id="copy-report">COPIAR RELATÓRIO</button>
 
     <script>
         const productsByDay = {
@@ -30,6 +30,7 @@
                     { name: "Polpas", requiresCheck: true },
                     { name: "Gordura", requiresCheck: true },
                     { name: "Farinha de Empanar", requiresCheck: true },
+                    { name: "Geléia de Pimenta", requiresCheck: true },
                     { name: "Cebola Caramelizada", requiresCheck: true },
                     { name: "Picles", requiresCheck: true },
                     { name: "Jalapeño", requiresCheck: true },
@@ -37,7 +38,7 @@
                     { name: "Bag Ketchup", requiresCheck: true },
                     { name: "Bag Mostarda", requiresCheck: true },
                     { name: "Caramelo Toffe", requiresCheck: true },
-                    { name: "Sorvetes", requiresCheck: true }
+                    { name: "Brownie", requiresCheck: true }
                 ]}
             ],
             "Segunda-feira": [],
@@ -64,89 +65,38 @@
                     { name: "Lentilha", requiresQuantity: true }
                 ]}
             ],
+
             "Quarta-feira": [
                 { category: "Mercado", products: [
-                    { name: "Molho Salada", requiresCheck: true },
-                    { name: "Barbecue", requiresCheck: true },
-                    { name: "Mel", requiresCheck: true },
-                    { name: "Ovomaltine", requiresCheck: true },
-                    { name: "Açucar", requiresCheck: true },
-                    { name: "Melado de Cana", requiresCheck: true },
-                    { name: "Açucar Mascavo", requiresCheck: true },
-                    { name: "Cerveja Preta", requiresCheck: true },
-                    { name: "Leite", requiresCheck: true },
-                    { name: "Creme de Leite", requiresCheck: true },
-                    { name: "Chocolate Gotas", requiresCheck: true },
-                    { name: "Nutella", requiresCheck: true },
-                    { name: "Iogurte", requiresCheck: true },
-                    { name: "Chantilly", requiresCheck: true },
-                    { name: "Sal", requiresCheck: true },
-                    { name: "Sal Grosso", requiresCheck: true },
-                    { name: "Vodka", requiresCheck: true },
-                    { name: "Velho Barreiro", requiresCheck: true },
-                    { name: "Sakê", requiresCheck: true },
-                    { name: "Amarula", requiresCheck: true },
-                    { name: "Gin", requiresCheck: true },
-                    { name: "Amendoim", requiresCheck: true },
-                    { name: "Cobertura de Chocolate", requiresCheck: true },
-                    { name: "Cobertura de Caramelo", requiresCheck: true },
-                    { name: "Vinagre Branco", requiresCheck: true },
-                    { name: "Vinagre Maça", requiresCheck: true },
-                    { name: "Shoyu", requiresCheck: true }
-                ]},
-                { category: "Águia Frios", products: [
-                    { name: "Gorgonzola", requiresQuantity: true },
-                    { name: "Gouda", requiresQuantity: true },
-                    { name: "Coalho", requiresQuantity: true },
-                    { name: "Sachês", requiresQuantity: true },
-                    { name: "Catupiry", requiresQuantity: true },
-                    { name: "Cremoso", requiresQuantity: true },
-                    { name: "Cheddar Polenghi", requiresQuantity: true },
-                    { name: "Parmesão", requiresQuantity: true },
-                    { name: "Creamcheese", requiresQuantity: true },
-                    { name: "Bacon", requiresQuantity: true },
-                    { name: "Mostarda", requiresQuantity: true },
-                    { name: "Codorna", requiresQuantity: true },
-                    { name: "Alho Frito", requiresQuantity: true },
-                    { name: "Castanha", requiresQuantity: true },
-                    { name: "Pecan", requiresQuantity: true },
-                    { name: "Azeite", requiresQuantity: true },
-                    { name: "Queijo Prato", requiresQuantity: true },
-                    { name: "Queijo Muçarela", requiresQuantity: true },
-                    { name: "Papel Manteiga", requiresQuantity: true },
-                    { name: "Tabasco", requiresQuantity: true },
-                    { name: "Palito de Lanche", requiresQuantity: true }
-                ]},
-                { category: "Limpeza", products: [
-                    { name: "Detergente", requiresCheck: true },
-                    { name: "Água Sanitária", requiresCheck: true },
-                    { name: "Sabão em Pó", requiresCheck: true },
-                    { name: "Veja", requiresCheck: true },
-                    { name: "Desengordurante Scotch", requiresCheck: true },
-                    { name: "Álcool", requiresCheck: true },
-                    { name: "Bucha", requiresCheck: true },
-                    { name: "Lustra Móveis", requiresCheck: true },
-                    { name: "Papel Higiênico", requiresCheck: true },
-                    { name: "Papel Toalha Cozinha", requiresCheck: true },
-                    { name: "Papel Toalha Banheiro", requiresCheck: true },
-                    { name: "Sabonete Liquido", requiresCheck: true },
-                    { name: "Pedra Sanitária", requiresCheck: true },
-                    { name: "Toucas", requiresCheck: true },
-                    { name: "Sacolas P e G", requiresCheck: true },
-                    { name: "Saco de Maionese", requiresCheck: true },
-                    { name: "Bobinas Plástica", requiresCheck: true },
-                    { name: "Saco de Lixo", requiresCheck: true },
-                    { name: "Colherzinha Maione", requiresCheck: true },
-                    { name: "Saco de Troco", requiresCheck: true },
-                    { name: "Saquinho Maione", requiresCheck: true },
-                    { name: "Sapólio", requiresCheck: true },
-                    { name: "Desinfetante", requiresCheck: true },
-                    { name: "Papel Alumínio", requiresCheck: true }
+                    { name: "Molho Salada", requiresQuantity: true },
+                    { name: "Barbecue", requiresQuantity: true },
+                    { name: "Mel", requiresQuantity: true },
+                    { name: "Ovomaltine", requiresQuantity: true },
+                    { name: "Açucar", requiresQuantity: true },
+                    { name: "Melado de Cana", requiresQuantity: true },
+                    { name: "Açucar Mascavo", requiresQuantity: true },
+                    { name: "Cerveja Preta", requiresQuantity: true },
+                    { name: "Leite", requiresQuantity: true },
+                    { name: "Creme de Leite", requiresQuantity: true },
+                    { name: "Chocolate Gotas", requiresQuantity: true },
+                    { name: "Nutella", requiresQuantity: true },
+                    { name: "Iogurte", requiresQuantity: true },
+                    { name: "Chantilly", requiresQuantity: true },
+                    { name: "Sal", requiresQuantity: true },
+                    { name: "Sal Grosso", requiresQuantity: true },
+                    { name: "Vodka", requiresQuantity: true },
+                    { name: "Velho Barreiro", requiresQuantity: true },
+                    { name: "Sakê", requiresQuantity: true },
+                    { name: "Amarula", requiresQuantity: true },
+                    { name: "Gin", requiresQuantity: true },
+                    { name: "Amendoim", requiresQuantity: true },
+                    { name: "Cobertura de Chocolate", requiresQuantity: true },
+                    { name: "Cobertura de Caramelo", requiresQuantity: true },
+                    { name: "Vinagre Branco", requiresQuantity: true },
+                    { name: "Vinagre Maça", requiresQuantity: true },
+                    { name: "Shoyu", requiresQuantity: true }
                 ]}
-            ],
-            "Quinta-feira": [],
-            "Sexta-feira": [],
-            "Sábado": []
+            ]
         };
 
         const commonCategories = [
@@ -166,11 +116,37 @@
                 { name: "Uva", requiresCheck: true },
                 { name: "Cheiro Verde", requiresCheck: true }
             ]},
+
+            { category: "Águia Frios 🦅", products: [
+            { name: "Gorgonzola", requiresQuantity: true },
+            { name: "Gouda (kg)", requiresQuantity: true },
+            { name: "Coalho (kg)", requiresQuantity: true },
+            { name: "Queijo Prato (kg)", requiresQuantity: true },
+            { name: "Queijo Muçarela (kg)", requiresQuantity: true },
+            { name: "Sachês", requiresQuantity: true },
+            { name: "Catupiry", requiresQuantity: true },
+            { name: "Cremoso", requiresQuantity: true },
+            { name: "Cheddar Polenghi", requiresQuantity: true },
+            { name: "Parmesão", requiresQuantity: true },
+            { name: "Creamcheese", requiresQuantity: true },
+            { name: "Bacon", requiresQuantity: true },
+            { name: "Mostarda", requiresQuantity: true },
+            { name: "Codorna", requiresQuantity: true },
+            { name: "Alho Frito", requiresQuantity: true },
+            { name: "Castanha", requiresQuantity: true },
+            { name: "Pecan", requiresQuantity: true },
+            { name: "Azeite", requiresQuantity: true },
+            { name: "Papel Manteiga", requiresQuantity: true },
+            { name: "Tabasco", requiresQuantity: true },
+            { name: "Palito de Lanche", requiresQuantity: true }
+        ]},
+
             { category: "Carnes", products: [
                 { name: "Tradicional", requiresQuantity: true },
                 { name: "Smash", requiresQuantity: true },
                 { name: "Picanha", requiresQuantity: true },
-                { name: "Costela", requiresQuantity: true }
+                { name: "Costela", requiresQuantity: true },
+                { name: "Frango", requiresCheck: true }
             ]},
             { category: "Pães", products: [
                 { name: "Brioche", requiresQuantity: true },
@@ -189,7 +165,6 @@
             productList.innerHTML = '';
             document.getElementById('currentDay').innerText = day;
 
-            // Renderizar categorias do dia específico
             if (productsByDay[day]) {
                 for (const category of productsByDay[day]) {
                     const categoryDiv = document.createElement('div');
@@ -206,7 +181,8 @@
                             `;
                         } else if (product.requiresQuantity) {
                             productDiv.innerHTML = `
-                                <label>${product.name} <input type="number" name="${product.name}" min="0" placeholder="Quantidade" /></label>
+                                <label>${product.name} <input type="number" name="${product.name}" min="0" placeholder="Quantidade" inputmode="numeric" /></label>
+
                             `;
                         }
 
@@ -217,7 +193,7 @@
                 }
             }
 
-            // Adicionar categorias comuns (Diário, Carnes e Pães) em todos os dias
+            // comuns
             for (const commonCategory of commonCategories) {
                 const categoryDiv = document.createElement('div');
                 categoryDiv.className = 'categoria';
@@ -244,64 +220,29 @@
             }
         }
 
-            // Gerar relatório e sua formatação
+        // gerar relatório
+        document.getElementById('generate-report').onclick = () => {
+            const day = document.getElementById('currentDay').innerText;
+            let report = `${day} 📄\n\n`;
 
-            document.getElementById('generate-report').onclick = () => {
-                const day = document.getElementById('currentDay').innerText;
-                let report = `${day} 📄\n\n`;
-            
-                const categoryEmojis = {
-                    "Produtos": "🛒",
-                    "Diário": "🍅",
-                    "Carnes": "🥩",
-                    "Pães": "🥖",
-                    "Veganos": "🌱",
-                    "Sorvetes": "🍦",
-                    // Adicione outros emojis conforme necessário
-                };
-            
-                // Adiciona produtos do dia específico
-                if (productsByDay[day]) {
-                    for (const category of productsByDay[day]) {
-                        const checkedProducts = [];
-                        const quantityProducts = [];
-            
-                        for (const product of category.products) {
-                            const checkbox = document.querySelector(`input[type="checkbox"][name="${product.name}"]`);
-                            const quantityInput = document.querySelector(`input[type="number"][name="${product.name}"]`);
-            
-                            if (product.requiresCheck && checkbox.checked) {
-                                checkedProducts.push(`* ${product.name}`);
-                            } else if (product.requiresQuantity) {
-                                const quantity = quantityInput.value;
-                                if (quantity) {
-                                    quantityProducts.push(`* ${product.name}: (${quantity})`);
-                                }
-                            }
-                        }
-            
-                        if (checkedProducts.length > 0 || quantityProducts.length > 0) {
-                            report += `**${category.category}** ${categoryEmojis[category.category] || ''}\n`;
-                            if (checkedProducts.length > 0) {
-                                report += `${checkedProducts.join('\n')}\n`;
-                            }
-                            if (quantityProducts.length > 0) {
-                                report += `${quantityProducts.join('\n')}\n`;
-                            }
-                            report += '\n';
-                        }
-                    }
-                }
-            
-                // Adiciona categorias comuns (Diário, Carnes e Pães)
-                for (const commonCategory of commonCategories) {
+            const categoryEmojis = {
+                "Produtos": "🛒",
+                "Diário": "🍅",
+                "Carnes": "🥩",
+                "Pães": "🥖",
+                "Veganos": "🌱",
+                "Sorvetes": "🍦",
+            };
+
+            if (productsByDay[day]) {
+                for (const category of productsByDay[day]) {
                     const checkedProducts = [];
                     const quantityProducts = [];
-            
-                    for (const product of commonCategory.products) {
+
+                    for (const product of category.products) {
                         const checkbox = document.querySelector(`input[type="checkbox"][name="${product.name}"]`);
                         const quantityInput = document.querySelector(`input[type="number"][name="${product.name}"]`);
-            
+
                         if (product.requiresCheck && checkbox.checked) {
                             checkedProducts.push(`* ${product.name}`);
                         } else if (product.requiresQuantity) {
@@ -311,9 +252,9 @@
                             }
                         }
                     }
-            
+
                     if (checkedProducts.length > 0 || quantityProducts.length > 0) {
-                        report += `**${commonCategory.category}** ${categoryEmojis[commonCategory.category] || ''}\n`;
+                        report += `**${category.category}** ${categoryEmojis[category.category] || ''}\n`;
                         if (checkedProducts.length > 0) {
                             report += `${checkedProducts.join('\n')}\n`;
                         }
@@ -323,18 +264,53 @@
                         report += '\n';
                     }
                 }
-            
-                document.getElementById('report').value = report;
-            };
-            
-            document.getElementById('copy-report').onclick = () => {
-                const reportTextArea = document.getElementById('report');
-                reportTextArea.select();
-                document.execCommand('copy');
-                alert('Relatório copiado para o clipboard!');
-            };            
+            }
 
-        // Renderiza os produtos para o dia atual ao carregar a página
+            for (const commonCategory of commonCategories) {
+                const checkedProducts = [];
+                const quantityProducts = [];
+
+                for (const product of commonCategory.products) {
+                    const checkbox = document.querySelector(`input[type="checkbox"][name="${product.name}"]`);
+                    const quantityInput = document.querySelector(`input[type="number"][name="${product.name}"]`);
+
+                    if (product.requiresCheck && checkbox.checked) {
+                        checkedProducts.push(`* ${product.name}`);
+                    } else if (product.requiresQuantity) {
+                        const quantity = quantityInput.value;
+                        if (quantity) {
+                            quantityProducts.push(`* ${product.name}: (${quantity})`);
+                        }
+                    }
+                }
+
+                if (checkedProducts.length > 0 || quantityProducts.length > 0) {
+                    report += `**${commonCategory.category}** ${categoryEmojis[commonCategory.category] || ''}\n`;
+                    if (checkedProducts.length > 0) {
+                        report += `${checkedProducts.join('\n')}\n`;
+                    }
+                    if (quantityProducts.length > 0) {
+                        report += `${quantityProducts.join('\n')}\n`;
+                    }
+                    report += '\n';
+                }
+            }
+
+            document.getElementById('report').value = report;
+        };
+
+        document.getElementById('copy-report').onclick = () => {
+            const reportTextArea = document.getElementById('report');
+            navigator.clipboard.writeText(reportTextArea.value)
+                .then(() => {
+                    alert('Relatório copiado para o clipboard!');
+                })
+                .catch(err => {
+                    alert('Erro ao copiar o relatório!');
+                });
+        };
+
+        // const currentDay para checar o dia atual
         const currentDay = getCurrentDay();
         renderProducts(currentDay);
     </script>
