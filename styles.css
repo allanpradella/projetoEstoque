@@ -39,20 +39,23 @@ h2 {
 }
 
 .produto {
-    margin-bottom: 15px;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: center; /* Alinha os itens verticalmente */
+    margin-bottom: 15px;
 }
 
-label {
+.produto label {
     font-size: 16px;
     color: #EAEAEA; /* Texto claro */
+    margin-right: 10px; /* Espaço entre o label e o input */
+    flex: 1; /* Garante que o texto ocupe o máximo de espaço */
 }
 
-input[type="checkbox"], input[type="number"] {
+.produto input[type="checkbox"],
+.produto input[type="number"] {
     margin-left: 10px;
     accent-color: #FFD700; /* Para navegadores que suportam */
+    max-width: 120px; /* Limita o tamanho do input */
 }
 
 button {
@@ -102,5 +105,14 @@ textarea {
 
     textarea {
         font-size: 12px;
+    }
+
+    .produto {
+        flex-direction: column; /* Alinha os itens verticalmente em telas pequenas */
+        align-items: flex-start; /* Garante o alinhamento à esquerda */
+    }
+
+    .produto label {
+        margin-bottom: 5px; /* Adiciona espaço entre o label e o input em telas pequenas */
     }
 }
