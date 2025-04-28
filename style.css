@@ -143,17 +143,22 @@ textarea {
     font-size: 16px;
 }
 
-.produto input[type="checkbox"],
-.produto input[type="number"] {
+.produto input[type="checkbox"] {
     flex-shrink: 0;
     width: 20px;
     height: 20px;
+}
+
+.produto input[type="number"] {
+    flex-shrink: 0;
+    width: 100px; /* AUMENTA o campo de quantidade */
+    height: 30px;
     background-color: #1a1a1a;
     color: #FFD700;
     border: 1px solid #555;
     border-radius: 5px;
-    font-size: 14px;
-    padding: 2px;
+    font-size: 16px;
+    padding: 5px;
 }
 
 /* Mobile responsivo */
