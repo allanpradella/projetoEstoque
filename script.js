@@ -258,18 +258,28 @@ function setupInputListeners(day) {
 
 // --- Gerar Relatório
 document.getElementById('generate-report').onclick = () => {
+    // Atualiza todas as seleções ANTES de montar o relatório
+    document.querySelectorAll('#product-list input').forEach(input => {
+        const name = input.name;
+        if (input.type === 'checkbox') {
+            userSelections[name] = input.checked;
+        } else if (input.type === 'number') {
+            userSelections[name] = input.value;
+        }
+    });
+
     let report = `📋 Lista de Compras:\n\n`;
 
     const categoryEmojis = {
         "Produtos": "🛒",
-        "Diário": "🍅",
+        "Diário": "🥗",
         "Carnes": "🥩",
         "Pães": "🥖",
         "Veganos": "🌱",
         "Sorvetes": "🍦",
         "Mercado": "🛍️",
         "Águia Frios 🦅": "🧀"
-    };
+    };    
 
     function extractProducts(day, categories) {
         categories.forEach(category => {
@@ -292,16 +302,35 @@ document.getElementById('generate-report').onclick = () => {
         });
     }
 
-    const allDays = getDaysOfWeek();
-    allDays.forEach(day => {
-        if (productsByDay[day]) {
-            extractProducts(day, productsByDay[day]);
+    const selectedDay = daySelector.value;
+    
+    if (productsByDay[selectedDay]) {
+        extractProducts(selectedDay, productsByDay[selectedDay]);
+    }
+
+    // Sempre renderiza as categorias comuns
+    commonCategories.forEach(category => {
+        let lines = [];
+        category.products.forEach(product => {
+            const inputName = `${selectedDay}_${product.name}`;
+            const value = userSelections[inputName];
+
+            if (product.requiresQuantity && value) {
+                lines.push(`* ${product.name}: (${value})`);
+            } else if (product.requiresCheck && value) {
+                lines.push(`* ${product.name}`);
+            }
+        });
+
+        if (lines.length > 0) {
+            report += `**${category.category}** ${categoryEmojis[category.category] || ''}\n`;
+            report += lines.join('\n') + '\n\n';
         }
     });
-    extractProducts('Comum', commonCategories);
 
     reportTextArea.value = report.trim() || 'Nenhum produto selecionado!';
 };
+
 
 // --- Copiar Relatório
 document.getElementById('copy-report').onclick = () => {
@@ -316,9 +345,12 @@ document.getElementById('copy-report').onclick = () => {
 
 // --- Limpar Seleções
 document.getElementById('clear-selection').onclick = () => {
-    Object.keys(userSelections).forEach(key => delete userSelections[key]);
-    renderProducts(daySelector.value);
-    reportTextArea.value = '';
+    const confirmClear = confirm("Tem certeza que deseja limpar TODAS as seleções?");
+    if (confirmClear) {
+        Object.keys(userSelections).forEach(key => delete userSelections[key]);
+        renderProducts(daySelector.value);
+        reportTextArea.value = '';
+    }
 };
 
 // --- Inicializar
