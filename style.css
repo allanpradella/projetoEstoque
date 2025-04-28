@@ -1,118 +1,179 @@
+/* Estilo geral */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #000000; /* Cor de fundo preto */
+    font-family: 'Roboto', sans-serif;
+    background-color: #000;
+    color: #EAEAEA;
     margin: 0;
     padding: 20px;
-    color: #EAEAEA; /* Texto claro para contraste */
 }
 
 header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 #logo {
     display: block;
     margin: 0 auto 20px;
-    width: 150px; /* Ajuste o tamanho conforme necessário */
-    height: auto; /* Mantém a proporção */
+    width: 150px;
 }
 
 h1 {
-    color: #FFD700; /* Amarelo */
+    color: #FFD700;
+    font-size: 28px;
     margin-bottom: 10px;
 }
 
 h2 {
-    color: #FFD700; /* Amarelo */
+    color: #FFD700;
+    font-size: 22px;
+    margin: 20px 0 10px 0;
     border-bottom: 2px solid #FFD700;
     padding-bottom: 5px;
-    margin-bottom: 10px;
+}
+
+/* Select Dia */
+#daySelector {
+    background-color: #2A2A2A;
+    color: #FFD700;
+    border: 1px solid #FFD700;
+    border-radius: 8px;
+    padding: 8px;
+    font-size: 16px;
+    margin-left: 10px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+#daySelector:hover, #daySelector:focus {
+    background-color: #333;
+    border-color: #FFC300;
+    outline: none;
+}
+
+/* Login */
+#login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#login-form {
+    background: #1a1a1a;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    width: 100%;
+    max-width: 400px;
+}
+
+#login-form input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    background: #2A2A2A;
+    color: #EAEAEA;
+    border: 1px solid #555;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    display: none;
+    margin-top: 10px;
+}
+
+/* Botões */
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: #FFD700;
+    color: #000;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    transition: background 0.3s, transform 0.2s;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #FFC300;
+    transform: scale(1.03);
+}
+
+/* Área de relatório */
+textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: #2A2A2A;
+    border: 1px solid #555;
+    border-radius: 5px;
+    color: #EAEAEA;
+    font-size: 14px;
+    resize: none;
+}
+
+/* Lista de Produtos */
+#product-list {
+    margin-top: 20px;
 }
 
 .categoria {
-    background: #2A2A2A; /* Fundo das categorias em cinza escuro */
+    background: #2A2A2A;
+    padding: 20px;
+    margin-bottom: 25px;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    margin-bottom: 20px;
-    padding: 15px;
 }
 
+/* Produtos */
 .produto {
     display: flex;
-    align-items: center; /* Alinha os itens verticalmente */
-    margin-bottom: 15px;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 12px;
+    gap: 10px;
 }
 
 .produto label {
+    width: 200px; /* Labels agora alinhados */
+    text-align: left;
     font-size: 16px;
-    color: #EAEAEA; /* Texto claro */
-    margin-right: 10px; /* Espaço entre o label e o input */
-    flex: 1; /* Garante que o texto ocupe o máximo de espaço */
 }
 
 .produto input[type="checkbox"],
 .produto input[type="number"] {
-    margin-left: 10px;
-    accent-color: #FFD700; /* Para navegadores que suportam */
-    max-width: 120px; /* Limita o tamanho do input */
-}
-
-button {
-    background-color: #FFD700; /* Amarelo */
-    color: #000000; /* Preto para o texto */
-    border: none;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    background-color: #1a1a1a;
+    color: #FFD700;
+    border: 1px solid #555;
     border-radius: 5px;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-    margin: 5px;
-}
-
-button:hover {
-    background-color: #FFC300; /* Amarelo mais claro ao passar o mouse */
-}
-
-textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #555; /* Borda cinza escura */
-    border-radius: 5px;
-    resize: none;
     font-size: 14px;
-    background-color: #2A2A2A; /* Fundo escuro */
-    color: #EAEAEA; /* Texto claro */
+    padding: 2px;
 }
 
-#copy-report {
-    background-color: #5CBB5C; /* Verde escuro */
-}
-
-#copy-report:hover {
-    background-color: #4DAE4D; /* Verde mais claro ao passar o mouse */
-}
-
+/* Mobile responsivo */
 @media (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
-    
-    button {
-        width: 100%;
+    #daySelector {
         margin-top: 10px;
-    }
-
-    textarea {
-        font-size: 12px;
+        width: 100%;
     }
 
     .produto {
-        flex-direction: column; /* Alinha os itens verticalmente em telas pequenas */
-        align-items: flex-start; /* Garante o alinhamento à esquerda */
+        flex-direction: column;
+        align-items: flex-start;
     }
 
     .produto label {
-        margin-bottom: 5px; /* Adiciona espaço entre o label e o input em telas pequenas */
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    .produto input {
+        width: 100%;
     }
 }
