@@ -3,38 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Compras</title>
+    <title>The Burger — Estoque</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    
-    <header>
-        <img src="logo.png" alt="Logo" id="logo">
-        <h1>
-            Lista de Compras -
-            <select id="daySelector"></select>
-        </h1>
-    </header>
 
-    <div id="login-container">
-        <form id="login-form">
-            <h2>Login</h2>
-            <input type="text" id="username" placeholder="Usuário" required>
-            <input type="password" id="password" placeholder="Senha" required>
-            <button type="submit">Entrar</button>
-            <p id="login-error" class="error-message">Usuário ou senha inválidos!</p>
-        </form>
+    <!-- LOGIN -->
+    <div id="login-screen">
+        <div id="login-card">
+            <img src="logo.png" alt="The Burger Logo" id="login-logo">
+            <p id="login-subtitle">SISTEMA DE ESTOQUE</p>
+            <div class="input-group">
+                <span class="input-icon">👤</span>
+                <input type="text" id="username" placeholder="Usuário" autocomplete="username">
+            </div>
+            <div class="input-group">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="password" placeholder="Senha" autocomplete="current-password">
+            </div>
+            <p id="login-error">Usuário ou senha inválidos!</p>
+            <button id="login-btn">ENTRAR</button>
+        </div>
     </div>
 
-    <div id="product-list-container" style="display:none;">
-        <div id="product-list"></div>
+    <!-- APP -->
+    <div id="app" style="display:none;">
 
-        <button id="generate-report">GERAR RELATÓRIO</button>
-        <button id="clear-selection">LIMPAR SELEÇÃO</button>
-        <textarea id="report" rows="10" cols="50" placeholder="O relatório será gerado aqui..." readonly></textarea>
-        <button id="copy-report">COPIAR RELATÓRIO</button>
-        <button id="logout-btn">SAIR</button>
+        <!-- HEADER -->
+        <header id="app-header">
+            <div id="header-left">
+                <img src="logo.png" alt="Logo" id="header-logo">
+                <div id="header-title">
+                    <span>Lista de Compras</span>
+                    <small id="logged-user"></small>
+                </div>
+            </div>
+            <div id="header-center">
+                <div id="progress-wrap">
+                    <span id="progress-label">0 itens</span>
+                    <div id="progress-bar-track">
+                        <div id="progress-bar-fill"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="header-right">
+                <select id="daySelector"></select>
+                <button id="logout-btn">⎋ Sair</button>
+            </div>
+        </header>
+
+        <!-- MAIN -->
+        <main id="main-content">
+            <div id="product-list"></div>
+        </main>
+
+        <!-- FOOTER ACTIONS -->
+        <div id="footer-actions">
+            <button id="clear-selection" class="btn-secondary">🗑 Limpar</button>
+            <button id="generate-report" class="btn-primary">📋 Gerar Relatório</button>
+        </div>
+
+        <!-- REPORT MODAL -->
+        <div id="report-modal" class="modal hidden">
+            <div class="modal-overlay" id="modal-overlay"></div>
+            <div class="modal-box">
+                <div class="modal-header">
+                    <h3>📋 Relatório de Compras</h3>
+                    <button class="modal-close" id="close-modal">✕</button>
+                </div>
+                <textarea id="report" readonly placeholder="Gerando relatório..."></textarea>
+                <div class="modal-actions">
+                    <button id="copy-report" class="btn-primary">📋 Copiar Relatório</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script src="script.js"></script>
