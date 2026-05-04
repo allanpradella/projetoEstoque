@@ -140,16 +140,15 @@ const commonCategories = [
 const userSelections = {};
 
 // --- Elementos da Página
-const loginForm = document.getElementById('login-form');
-const loginContainer = document.getElementById('login-container');
-const productListContainer = document.getElementById('product-list-container');
+const loginScreen = document.getElementById('login-screen');
+const app = document.getElementById('app');
+const loginBtn = document.getElementById('login-btn');
 const productList = document.getElementById('product-list');
 const daySelector = document.getElementById('daySelector');
 const reportTextArea = document.getElementById('report');
 
 // --- Funções de Login
-loginForm.onsubmit = (event) => {
-    event.preventDefault();
+loginBtn.onclick = () => {
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value;
     const loginError = document.getElementById('login-error');
@@ -169,8 +168,16 @@ document.getElementById('logout-btn').onclick = () => {
 
 // --- Mostrar Área de Produtos
 function showProductList() {
-    loginContainer.style.display = 'none';
-    productListContainer.style.display = 'block';
+    loginScreen.style.display = 'none';
+    app.style.display = 'block';
+
+    const loggedUser = document.getElementById('logged-user');
+    const username = localStorage.getItem('loggedInUser');
+
+    if (loggedUser && username) {
+        loggedUser.textContent = `Usuário: ${username}`;
+    }
+
     populateDaySelector();
 }
 
