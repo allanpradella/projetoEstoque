@@ -143,28 +143,67 @@ const userSelections = {};
 const loginScreen = document.getElementById('login-screen');
 const app = document.getElementById('app');
 const loginBtn = document.getElementById('login-btn');
+const logoutBtn = document.getElementById('logout-btn');
 const productList = document.getElementById('product-list');
 const daySelector = document.getElementById('daySelector');
 const reportTextArea = document.getElementById('report');
+const reportModal = document.getElementById('report-modal');
+const closeModalBtn = document.getElementById('close-modal');
+const modalOverlay = document.getElementById('modal-overlay');
+const copyReportBtn = document.getElementById('copy-report');
+const clearSelectionBtn = document.getElementById('clear-selection');
+const generateReportBtn = document.getElementById('generate-report');
+const progressLabel = document.getElementById('progress-label');
+const progressBarFill = document.getElementById('progress-bar-fill');
 
-// --- Funções de Login
-loginBtn.onclick = () => {
+// --- Dias
+function getDaysOfWeek() {
+    return [
+        "Domingo",
+        "Segunda-feira",
+        "Terça-feira",
+        "Quarta-feira",
+        "Quinta-feira",
+        "Sexta-feira",
+        "Sábado"
+    ];
+}
+
+// --- Login
+function handleLogin() {
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value;
     const loginError = document.getElementById('login-error');
 
     if (USERS[username] && USERS[username].password === password) {
         localStorage.setItem('loggedInUser', username);
+        if (loginError) loginError.style.display = 'none';
         showProductList();
     } else {
-        loginError.style.display = 'block';
+        if (loginError) loginError.style.display = 'block';
     }
-};
+}
 
-document.getElementById('logout-btn').onclick = () => {
-    localStorage.removeItem('loggedInUser');
-    window.location.reload();
-};
+if (loginBtn) {
+    loginBtn.onclick = handleLogin;
+}
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' && app.style.display === 'none') {
+        handleLogin();
+    }
+
+    if (event.key === 'Escape') {
+        closeReportModal();
+    }
+});
+
+if (logoutBtn) {
+    logoutBtn.onclick = () => {
+        localStorage.removeItem('loggedInUser');
+        window.location.reload();
+    };
+}
 
 // --- Mostrar Área de Produtos
 function showProductList() {
@@ -182,10 +221,6 @@ function showProductList() {
 }
 
 // --- Preencher Selector de Dias
-function getDaysOfWeek() {
-    return ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
-}
-
 function populateDaySelector() {
     const days = getDaysOfWeek();
     daySelector.innerHTML = '';
@@ -199,6 +234,7 @@ function populateDaySelector() {
 
     const today = new Date().getDay();
     daySelector.selectedIndex = today;
+
     renderProducts(daySelector.value);
 
     daySelector.onchange = () => {
@@ -210,155 +246,322 @@ function populateDaySelector() {
 function renderProducts(day) {
     productList.innerHTML = '';
 
-    const renderCategory = (category) => {
-        const categoryDiv = document.createElement('div');
-        categoryDiv.className = 'categoria';
-        categoryDiv.innerHTML = `<h2>${category.category}</h2>`;
-
-        category.products.forEach(product => {
-            const productDiv = document.createElement('div');
-            productDiv.className = 'produto';
-
-            const inputName = `${day}_${product.name}`;
-
-            const input = product.requiresQuantity
-                ? `<input type="number" min="0" name="${inputName}" placeholder="Qtd" inputmode="numeric" value="${userSelections[inputName] || ''}">`
-                : `<input type="checkbox" name="${inputName}" ${userSelections[inputName] ? 'checked' : ''}>`;
-
-            productDiv.innerHTML = `<label>${product.name} ${input}</label>`;
-            categoryDiv.appendChild(productDiv);
-        });
-
-        productList.appendChild(categoryDiv);
-    };
-
     const dailyProducts = productsByDay[day] || [];
 
     if (dailyProducts.length === 0) {
         const emptyMessage = document.createElement('div');
-        emptyMessage.className = 'categoria';
-        emptyMessage.innerHTML = `<h2 style="text-align:center; font-weight:normal;">❗ Nenhum produto cadastrado para este dia.</h2>`;
+        emptyMessage.className = 'empty-day';
+        emptyMessage.textContent = '❗ Nenhum produto específico cadastrado para este dia.';
         productList.appendChild(emptyMessage);
     } else {
-        dailyProducts.forEach(renderCategory);
+        dailyProducts.forEach(category => renderCategory(category, day));
     }
 
-    commonCategories.forEach(renderCategory);
+    commonCategories.forEach(category => renderCategory(category, day));
 
-    setupInputListeners(day);
+    updateProgress();
 }
 
-// --- Monitorar Inputs e Salvar Seleções
-function setupInputListeners(day) {
-    const inputs = productList.querySelectorAll('input');
-    inputs.forEach(input => {
-        input.addEventListener('input', () => {
-            const name = input.name;
-            if (input.type === 'checkbox') {
-                userSelections[name] = input.checked;
-            } else if (input.type === 'number') {
-                userSelections[name] = input.value;
-            }
-        });
-    });
-}
+// --- Renderizar Categoria
+function renderCategory(category, day) {
+    const categoryDiv = document.createElement('section');
+    categoryDiv.className = 'categoria';
 
-// --- Gerar Relatório
-document.getElementById('generate-report').onclick = () => {
-    // Atualiza todas as seleções ANTES de montar o relatório
-    document.querySelectorAll('#product-list input').forEach(input => {
-        const name = input.name;
-        if (input.type === 'checkbox') {
-            userSelections[name] = input.checked;
-        } else if (input.type === 'number') {
-            userSelections[name] = input.value;
+    const selectedCount = category.products.filter(product => {
+        const inputName = `${day}_${product.name}`;
+        const value = userSelections[inputName];
+
+        if (product.requiresQuantity) {
+            return Number(value) > 0;
         }
-    });
 
-    let report = `📋 Lista de Compras:\n\n`;
+        return value === true;
+    }).length;
 
-    const categoryEmojis = {
-        "Produtos": "🛒",
-        "Diário": "🥗",
-        "Carnes": "🥩",
-        "Pães": "🥖",
-        "Veganos": "🌱",
-        "Sorvetes": "🍦",
-        "Mercado": "🛍️",
-        "Águia Frios 🦅": "🧀"
-    };    
+    categoryDiv.innerHTML = `
+        <div class="categoria-header">
+            <div class="categoria-title-wrap">
+                <h2>${category.category}</h2>
+                <span class="categoria-badge ${selectedCount > 0 ? 'has-items' : ''}">
+                    ${selectedCount}/${category.products.length}
+                </span>
+            </div>
+            <span class="categoria-toggle">▼</span>
+        </div>
+        <div class="categoria-body"></div>
+    `;
 
-    function extractProducts(day, categories) {
-        categories.forEach(category => {
-            let lines = [];
-            category.products.forEach(product => {
-                const inputName = `${day}_${product.name}`;
-                const value = userSelections[inputName];
+    const header = categoryDiv.querySelector('.categoria-header');
+    const body = categoryDiv.querySelector('.categoria-body');
 
-                if (product.requiresQuantity && value) {
-                    lines.push(`* ${product.name}: (${value})`);
-                } else if (product.requiresCheck && value) {
-                    lines.push(`* ${product.name}`);
+    header.onclick = () => {
+        categoryDiv.classList.toggle('collapsed');
+    };
+
+    category.products.forEach(product => {
+        const productDiv = document.createElement('div');
+        const inputName = `${day}_${product.name}`;
+        const value = userSelections[inputName];
+
+        productDiv.className = 'produto';
+
+        if (product.requiresQuantity && Number(value) > 0) {
+            productDiv.classList.add('checked');
+        }
+
+        if (product.requiresCheck && value === true) {
+            productDiv.classList.add('checked');
+        }
+
+        if (product.requiresQuantity) {
+            productDiv.innerHTML = `
+                <span class="produto-name">${product.name}</span>
+                <div class="qty-wrap">
+                    <button class="qty-btn" type="button" data-action="minus">−</button>
+                    <input 
+                        class="qty-input" 
+                        type="number" 
+                        min="0" 
+                        name="${inputName}" 
+                        placeholder="0" 
+                        inputmode="numeric" 
+                        value="${value || ''}"
+                    >
+                    <button class="qty-btn" type="button" data-action="plus">+</button>
+                </div>
+            `;
+
+            const input = productDiv.querySelector('.qty-input');
+            const minusBtn = productDiv.querySelector('[data-action="minus"]');
+            const plusBtn = productDiv.querySelector('[data-action="plus"]');
+
+            input.addEventListener('input', () => {
+                const numberValue = Number(input.value);
+
+                if (numberValue > 0) {
+                    userSelections[inputName] = input.value;
+                    productDiv.classList.add('checked');
+                } else {
+                    delete userSelections[inputName];
+                    input.value = '';
+                    productDiv.classList.remove('checked');
                 }
+
+                updateCategoryBadge(categoryDiv, category, day);
+                updateProgress();
             });
 
-            if (lines.length > 0) {
-                report += `**${category.category}** ${categoryEmojis[category.category] || ''}\n`;
-                report += lines.join('\n') + '\n\n';
-            }
-        });
-    }
+            minusBtn.onclick = () => {
+                const currentValue = Number(input.value) || 0;
+                const newValue = Math.max(0, currentValue - 1);
 
+                input.value = newValue === 0 ? '' : newValue;
+                input.dispatchEvent(new Event('input'));
+            };
+
+            plusBtn.onclick = () => {
+                const currentValue = Number(input.value) || 0;
+                input.value = currentValue + 1;
+                input.dispatchEvent(new Event('input'));
+            };
+        } else {
+            productDiv.innerHTML = `
+                <span class="produto-name">${product.name}</span>
+                <label class="custom-checkbox">
+                    <input 
+                        type="checkbox" 
+                        name="${inputName}" 
+                        ${value ? 'checked' : ''}
+                    >
+                    <span class="check-box"></span>
+                </label>
+            `;
+
+            const checkbox = productDiv.querySelector('input[type="checkbox"]');
+
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    userSelections[inputName] = true;
+                    productDiv.classList.add('checked');
+                } else {
+                    delete userSelections[inputName];
+                    productDiv.classList.remove('checked');
+                }
+
+                updateCategoryBadge(categoryDiv, category, day);
+                updateProgress();
+            });
+        }
+
+        body.appendChild(productDiv);
+    });
+
+    productList.appendChild(categoryDiv);
+}
+
+// --- Atualizar badge da categoria
+function updateCategoryBadge(categoryDiv, category, day) {
+    const badge = categoryDiv.querySelector('.categoria-badge');
+
+    const selectedCount = category.products.filter(product => {
+        const inputName = `${day}_${product.name}`;
+        const value = userSelections[inputName];
+
+        if (product.requiresQuantity) {
+            return Number(value) > 0;
+        }
+
+        return value === true;
+    }).length;
+
+    badge.textContent = `${selectedCount}/${category.products.length}`;
+
+    if (selectedCount > 0) {
+        badge.classList.add('has-items');
+    } else {
+        badge.classList.remove('has-items');
+    }
+}
+
+// --- Atualizar progresso geral
+function updateProgress() {
     const selectedDay = daySelector.value;
-    
-    if (productsByDay[selectedDay]) {
-        extractProducts(selectedDay, productsByDay[selectedDay]);
-    }
+    const dayCategories = productsByDay[selectedDay] || [];
+    const allCategories = [...dayCategories, ...commonCategories];
 
-    // Sempre renderiza as categorias comuns
-    commonCategories.forEach(category => {
-        let lines = [];
+    let totalItems = 0;
+    let selectedItems = 0;
+
+    allCategories.forEach(category => {
         category.products.forEach(product => {
+            totalItems++;
+
             const inputName = `${selectedDay}_${product.name}`;
             const value = userSelections[inputName];
 
-            if (product.requiresQuantity && value) {
-                lines.push(`* ${product.name}: (${value})`);
-            } else if (product.requiresCheck && value) {
-                lines.push(`* ${product.name}`);
+            if (product.requiresQuantity && Number(value) > 0) {
+                selectedItems++;
+            }
+
+            if (product.requiresCheck && value === true) {
+                selectedItems++;
             }
         });
-
-        if (lines.length > 0) {
-            report += `**${category.category}** ${categoryEmojis[category.category] || ''}\n`;
-            report += lines.join('\n') + '\n\n';
-        }
     });
 
-    reportTextArea.value = report.trim() || 'Nenhum produto selecionado!';
-};
+    const percentage = totalItems === 0 ? 0 : Math.round((selectedItems / totalItems) * 100);
 
+    if (progressLabel) {
+        progressLabel.textContent = `${selectedItems} de ${totalItems} itens`;
+    }
+
+    if (progressBarFill) {
+        progressBarFill.style.width = `${percentage}%`;
+    }
+}
+
+// --- Gerar Relatório
+if (generateReportBtn) {
+    generateReportBtn.onclick = () => {
+        const selectedDay = daySelector.value;
+
+        let report = `📋 Lista de Compras — ${selectedDay}\n\n`;
+
+        const categoryEmojis = {
+            "Produtos": "🛒",
+            "Diário": "🥗",
+            "Carnes": "🥩",
+            "Pães": "🥖",
+            "Veganos": "🌱",
+            "Sorvetes": "🍦",
+            "Mercado": "🛍️",
+            "Águia Frios 🦅": "🧀"
+        };
+
+        function extractProducts(day, categories) {
+            categories.forEach(category => {
+                const lines = [];
+
+                category.products.forEach(product => {
+                    const inputName = `${day}_${product.name}`;
+                    const value = userSelections[inputName];
+
+                    if (product.requiresQuantity && Number(value) > 0) {
+                        lines.push(`* ${product.name}: (${value})`);
+                    } else if (product.requiresCheck && value === true) {
+                        lines.push(`* ${product.name}`);
+                    }
+                });
+
+                if (lines.length > 0) {
+                    report += `**${category.category}** ${categoryEmojis[category.category] || ''}\n`;
+                    report += lines.join('\n') + '\n\n';
+                }
+            });
+        }
+
+        if (productsByDay[selectedDay]) {
+            extractProducts(selectedDay, productsByDay[selectedDay]);
+        }
+
+        extractProducts(selectedDay, commonCategories);
+
+        reportTextArea.value = report.trim() || 'Nenhum produto selecionado!';
+
+        openReportModal();
+    };
+}
+
+// --- Modal do relatório
+function openReportModal() {
+    if (reportModal) {
+        reportModal.classList.remove('hidden');
+    }
+}
+
+function closeReportModal() {
+    if (reportModal) {
+        reportModal.classList.add('hidden');
+    }
+}
+
+if (closeModalBtn) {
+    closeModalBtn.onclick = closeReportModal;
+}
+
+if (modalOverlay) {
+    modalOverlay.onclick = closeReportModal;
+}
 
 // --- Copiar Relatório
-document.getElementById('copy-report').onclick = () => {
-    if (!reportTextArea.value) {
-        alert('Gere primeiro o relatório!');
-        return;
-    }
-    navigator.clipboard.writeText(reportTextArea.value)
-        .then(() => alert('Relatório copiado!'))
-        .catch(() => alert('Erro ao copiar.'));
-};
+if (copyReportBtn) {
+    copyReportBtn.onclick = () => {
+        if (!reportTextArea.value) {
+            alert('Gere primeiro o relatório!');
+            return;
+        }
+
+        navigator.clipboard.writeText(reportTextArea.value)
+            .then(() => alert('Relatório copiado!'))
+            .catch(() => alert('Erro ao copiar.'));
+    };
+}
 
 // --- Limpar Seleções
-document.getElementById('clear-selection').onclick = () => {
-    const confirmClear = confirm("Tem certeza que deseja limpar TODAS as seleções?");
-    if (confirmClear) {
-        Object.keys(userSelections).forEach(key => delete userSelections[key]);
-        renderProducts(daySelector.value);
-        reportTextArea.value = '';
-    }
-};
+if (clearSelectionBtn) {
+    clearSelectionBtn.onclick = () => {
+        const confirmClear = confirm('Tem certeza que deseja limpar TODAS as seleções deste uso?');
+
+        if (confirmClear) {
+            Object.keys(userSelections).forEach(key => delete userSelections[key]);
+            renderProducts(daySelector.value);
+
+            if (reportTextArea) {
+                reportTextArea.value = '';
+            }
+        }
+    };
+}
 
 // --- Inicializar
 if (localStorage.getItem('loggedInUser')) {
