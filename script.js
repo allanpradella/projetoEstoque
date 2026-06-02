@@ -4,7 +4,7 @@ const USERS = {
     theburger: { password: 'theburger' }
 };
 
-// --- Definição de Categorias (templates reutilizáveis por dia)
+// --- Categorias
 const CAT = {
     carnes: {
         category: "Carnes 🥩",
@@ -75,7 +75,7 @@ const CAT = {
     gelo: {
         category: "Gelo 🧊",
         products: [
-            { name: "Gelo 🧊", requiresQuantity: true }
+            { name: "Gelo", requiresQuantity: true }
         ]
     },
     descartaveis: {
@@ -120,16 +120,16 @@ const CAT = {
         category: "Mercado Geral 🛍️",
         products: [
             { name: "Guardanapo Mili Salão", requiresQuantity: true },
-            { name: "Saco de Lixo 🗑️", requiresQuantity: true },
+            { name: "Saco de Lixo", requiresQuantity: true },
             { name: "Sachês (Sal / Açúcar / Adoçante)", requiresQuantity: true },
             { name: "Palito de Dente", requiresQuantity: true },
             { name: "Colherzinha p/ Maionese", requiresQuantity: true },
             { name: "Colher para Pudim", requiresQuantity: true },
-            { name: "Prato de Bolo + Garfinho + Vela 🕯️", requiresCheck: true },
+            { name: "Prato de Bolo + Garfinho + Vela", requiresCheck: true },
             { name: "Canudo Milkshake", requiresQuantity: true },
             { name: "Canudo Refri", requiresQuantity: true },
             { name: "Canudo Drink", requiresQuantity: true },
-            { name: "Picles 🥒", requiresQuantity: true },
+            { name: "Picles", requiresQuantity: true },
             { name: "Cebola Crispy", requiresQuantity: true },
             { name: "Açúcar", requiresQuantity: true },
             { name: "Açúcar Mascavo", requiresQuantity: true },
@@ -143,12 +143,12 @@ const CAT = {
             { name: "Cerveja Preta", requiresQuantity: true },
             { name: "Molho Inglês", requiresQuantity: true },
             { name: "Shoyu", requiresQuantity: true },
-            { name: "Molho para Salada 🥗", requiresQuantity: true },
+            { name: "Molho para Salada", requiresQuantity: true },
             { name: "Ovomaltine", requiresQuantity: true },
             { name: "Amendoim Triturado", requiresQuantity: true },
             { name: "Chocolate Gotas", requiresQuantity: true },
             { name: "Creme de Leite", requiresQuantity: true },
-            { name: "Mel 🍯", requiresQuantity: true },
+            { name: "Mel", requiresQuantity: true },
             { name: "Leite", requiresQuantity: true },
             { name: "Cobertura Chocolate", requiresQuantity: true },
             { name: "Cobertura Caramelo", requiresQuantity: true },
@@ -181,7 +181,7 @@ const CAT = {
             { name: "Copo Milkshake 400ml c/ Tampa", requiresQuantity: true },
             { name: "Caneta Bic", requiresCheck: true },
             { name: "Caneta Piloto", requiresCheck: true },
-            { name: "Pilhas 🔋", requiresCheck: true },
+            { name: "Pilhas", requiresCheck: true },
             { name: "Caderno", requiresCheck: true },
             { name: "Fita Dupla Face", requiresCheck: true },
             { name: "Fita Isolante", requiresCheck: true },
@@ -209,7 +209,7 @@ const CAT = {
             { name: "Álcool", requiresCheck: true },
             { name: "Veja", requiresCheck: true },
             { name: "Lustra Móveis", requiresCheck: true },
-            { name: "Veneno de Barata 🪳", requiresCheck: true },
+            { name: "Veneno de Barata", requiresCheck: true },
             { name: "Pano de Chão", requiresCheck: true },
             { name: "Pano de Mesa", requiresCheck: true },
             { name: "Guardanapo de Pano", requiresCheck: true }
@@ -239,93 +239,60 @@ const CAT = {
 // --- Produtos por Dia
 const productsByDay = {
     "Domingo": [
-        CAT.carnes,
-        CAT.braguini,
-        CAT.aguia,
-        CAT.pmg,
-        CAT.descartaveis,
-        CAT.vegetarianos,
-        CAT.sorvetes,
-        CAT.sobremesas,
-        CAT.chopp,
-        CAT.mercado,
-        CAT.pao,
-        CAT.gelo,
-        CAT.bebidas
+        CAT.carnes, CAT.braguini, CAT.aguia, CAT.pmg,
+        CAT.descartaveis, CAT.vegetarianos, CAT.sorvetes,
+        CAT.sobremesas, CAT.chopp, CAT.mercado, CAT.pao,
+        CAT.gelo, CAT.bebidas
     ],
     "Segunda-feira": [],
-    "Terça-feira": [
-        CAT.carnes
-    ],
-    "Quarta-feira": [
-        CAT.carnes,
-        CAT.braguini,
-        CAT.mercado,
-        CAT.outrosItens,
-        CAT.aguia,
-        CAT.limpeza
-    ],
-    "Quinta-feira": [
-        CAT.carnes,
-        CAT.pao
-    ],
-    "Sexta-feira": [
-        CAT.carnes,
-        CAT.aguia,
-        CAT.braguini,
-        CAT.gelo
-    ],
-    "Sábado": [
-        CAT.carnes
-    ]
+    "Terça-feira":  [ CAT.carnes ],
+    "Quarta-feira": [ CAT.carnes, CAT.braguini, CAT.mercado, CAT.outrosItens, CAT.aguia, CAT.limpeza ],
+    "Quinta-feira": [ CAT.carnes, CAT.pao ],
+    "Sexta-feira":  [ CAT.carnes, CAT.aguia, CAT.braguini, CAT.gelo ],
+    "Sábado":       [ CAT.carnes ]
 };
 
 const commonCategories = [];
 
-// --- Seleções do usuário (memória de sessão)
+// --- Seleções (memória de sessão)
 const userSelections = {};
 
-// --- Elementos
-const loginScreen    = document.getElementById('login-screen');
-const app            = document.getElementById('app');
-const loginBtn       = document.getElementById('login-btn');
-const logoutBtn      = document.getElementById('logout-btn');
-const productList    = document.getElementById('product-list');
-const daySelector    = document.getElementById('daySelector');
-const reportTextArea = document.getElementById('report');
-const reportModal    = document.getElementById('report-modal');
-const closeModalBtn  = document.getElementById('close-modal');
-const modalOverlay   = document.getElementById('modal-overlay');
-const copyReportBtn  = document.getElementById('copy-report');
+// --- Elementos DOM
+const loginScreen       = document.getElementById('login-screen');
+const app               = document.getElementById('app');
+const loginBtn          = document.getElementById('login-btn');
+const logoutBtn         = document.getElementById('logout-btn');
+const productList       = document.getElementById('product-list');
+const daySelector       = document.getElementById('daySelector');
+const reportTextArea    = document.getElementById('report');
+const reportModal       = document.getElementById('report-modal');
+const closeModalBtn     = document.getElementById('close-modal');
+const modalOverlay      = document.getElementById('modal-overlay');
+const copyReportBtn     = document.getElementById('copy-report');
 const clearSelectionBtn = document.getElementById('clear-selection');
 const generateReportBtn = document.getElementById('generate-report');
-const progressLabel  = document.getElementById('progress-label');
-const progressBarFill = document.getElementById('progress-bar-fill');
+const progressLabel     = document.getElementById('progress-label');
+const progressBarFill   = document.getElementById('progress-bar-fill');
 
 // --- Toast
-function showToast(msg, color = 'var(--success)') {
-    let toast = document.getElementById('toast');
-    if (!toast) {
-        toast = document.createElement('div');
-        toast.id = 'toast';
-        document.body.appendChild(toast);
-    }
+function showToast(msg, color) {
+    const toast = document.getElementById('toast');
     toast.textContent = msg;
-    toast.style.background = color;
+    toast.style.background = color || 'var(--success)';
     toast.classList.add('show');
-    clearTimeout(toast._timer);
-    toast._timer = setTimeout(() => toast.classList.remove('show'), 2200);
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => toast.classList.remove('show'), 2200);
 }
 
-// --- Dias da semana
+// --- Dias
 function getDaysOfWeek() {
     return ["Domingo","Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado"];
 }
 
 // --- Login
 function handleLogin() {
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value;
+    const username   = document.getElementById('username').value.trim();
+    const password   = document.getElementById('password').value;
     const loginError = document.getElementById('login-error');
 
     if (USERS[username] && USERS[username].password === password) {
@@ -357,17 +324,15 @@ function showProductList() {
     app.style.display = 'block';
 
     const loggedUser = document.getElementById('logged-user');
-    const username = localStorage.getItem('loggedInUser');
-    if (loggedUser && username) loggedUser.textContent = `Usuário: ${username}`;
+    const username   = localStorage.getItem('loggedInUser');
+    if (loggedUser && username) loggedUser.textContent = 'Usuário: ' + username;
 
     populateDaySelector();
 }
 
 // --- Selector de Dias
 function populateDaySelector() {
-    const days = getDaysOfWeek();
-    daySelector.innerHTML = '';
-    days.forEach(day => {
+    getDaysOfWeek().forEach(day => {
         const opt = document.createElement('option');
         opt.value = day;
         opt.textContent = day;
@@ -382,87 +347,90 @@ function populateDaySelector() {
 // --- Renderizar Produtos
 function renderProducts(day) {
     productList.innerHTML = '';
-    const dailyProducts = productsByDay[day] || [];
-    const allCategories = [...dailyProducts, ...commonCategories];
+    const cats = [...(productsByDay[day] || []), ...commonCategories];
 
-    if (allCategories.length === 0) {
+    if (cats.length === 0) {
         const msg = document.createElement('div');
         msg.className = 'empty-day';
         msg.textContent = '❗ Nenhum produto cadastrado para este dia.';
         productList.appendChild(msg);
     } else {
-        allCategories.forEach(cat => renderCategory(cat, day));
+        cats.forEach(cat => renderCategory(cat, day));
     }
 
     updateProgress();
 }
 
+// --- Contar selecionados
+function countSelected(category, day) {
+    return category.products.filter(p => {
+        const v = userSelections[day + '_' + p.name];
+        return p.requiresQuantity ? Number(v) > 0 : v === true;
+    }).length;
+}
+
 // --- Renderizar Categoria
 function renderCategory(category, day) {
-    const categoryDiv = document.createElement('section');
-    categoryDiv.className = 'categoria';
+    const sec = document.createElement('section');
+    sec.className = 'categoria';
 
-    const selectedCount = countSelected(category, day);
+    const n = countSelected(category, day);
 
-    categoryDiv.innerHTML = `
-        <div class="categoria-header">
-            <div class="categoria-title-wrap">
-                <h2>${category.category}</h2>
-                <span class="categoria-badge ${selectedCount > 0 ? 'has-items' : ''}">
-                    ${selectedCount}/${category.products.length}
-                </span>
-            </div>
-            <span class="categoria-toggle">▼</span>
-        </div>
-        <div class="categoria-body"></div>
-    `;
+    sec.innerHTML =
+        '<div class="categoria-header">' +
+            '<div class="categoria-title-wrap">' +
+                '<h2>' + category.category + '</h2>' +
+                '<span class="categoria-badge ' + (n > 0 ? 'has-items' : '') + '">' +
+                    n + '/' + category.products.length +
+                '</span>' +
+            '</div>' +
+            '<span class="categoria-toggle">▼</span>' +
+        '</div>' +
+        '<div class="categoria-body"></div>';
 
-    const header = categoryDiv.querySelector('.categoria-header');
-    const body   = categoryDiv.querySelector('.categoria-body');
+    const header = sec.querySelector('.categoria-header');
+    const body   = sec.querySelector('.categoria-body');
 
-    header.onclick = () => categoryDiv.classList.toggle('collapsed');
+    header.onclick = () => sec.classList.toggle('collapsed');
 
     category.products.forEach(product => {
-        const productDiv = document.createElement('div');
-        const inputName  = `${day}_${product.name}`;
-        const value      = userSelections[inputName];
+        const div       = document.createElement('div');
+        const inputName = day + '_' + product.name;
+        const value     = userSelections[inputName];
 
-        productDiv.className = 'produto';
-        if (product.requiresQuantity && Number(value) > 0) productDiv.classList.add('checked');
-        if (product.requiresCheck && value === true) productDiv.classList.add('checked');
+        div.className = 'produto';
+        if (product.requiresQuantity && Number(value) > 0) div.classList.add('checked');
+        if (product.requiresCheck   && value === true)     div.classList.add('checked');
 
         if (product.requiresQuantity) {
-            productDiv.innerHTML = `
-                <span class="produto-name">${product.name}</span>
-                <div class="qty-wrap">
-                    <button class="qty-btn" type="button" data-action="minus">−</button>
-                    <input class="qty-input" type="number" min="0" name="${inputName}"
-                        placeholder="0" inputmode="numeric" value="${value || ''}">
-                    <button class="qty-btn" type="button" data-action="plus">+</button>
-                </div>
-            `;
+            div.innerHTML =
+                '<span class="produto-name">' + product.name + '</span>' +
+                '<div class="qty-wrap">' +
+                    '<button class="qty-btn" type="button" data-action="minus">−</button>' +
+                    '<input class="qty-input" type="number" min="0" name="' + inputName + '" placeholder="0" inputmode="numeric" value="' + (value || '') + '">' +
+                    '<button class="qty-btn" type="button" data-action="plus">+</button>' +
+                '</div>';
 
-            const input    = productDiv.querySelector('.qty-input');
-            const minusBtn = productDiv.querySelector('[data-action="minus"]');
-            const plusBtn  = productDiv.querySelector('[data-action="plus"]');
+            const input    = div.querySelector('.qty-input');
+            const minusBtn = div.querySelector('[data-action="minus"]');
+            const plusBtn  = div.querySelector('[data-action="plus"]');
 
             input.addEventListener('input', () => {
                 const n = Number(input.value);
                 if (n > 0) {
                     userSelections[inputName] = input.value;
-                    productDiv.classList.add('checked');
+                    div.classList.add('checked');
                 } else {
                     delete userSelections[inputName];
                     input.value = '';
-                    productDiv.classList.remove('checked');
+                    div.classList.remove('checked');
                 }
-                updateCategoryBadge(categoryDiv, category, day);
+                updateCategoryBadge(sec, category, day);
                 updateProgress();
             });
 
             minusBtn.onclick = () => {
-                const cur = Number(input.value) || 0;
-                input.value = Math.max(0, cur - 1) || '';
+                input.value = Math.max(0, (Number(input.value) || 0) - 1) || '';
                 input.dispatchEvent(new Event('input'));
             };
             plusBtn.onclick = () => {
@@ -470,68 +438,59 @@ function renderCategory(category, day) {
                 input.dispatchEvent(new Event('input'));
             };
         } else {
-            productDiv.innerHTML = `
-                <span class="produto-name">${product.name}</span>
-                <label class="custom-checkbox">
-                    <input type="checkbox" name="${inputName}" ${value ? 'checked' : ''}>
-                    <span class="check-box"></span>
-                </label>
-            `;
+            div.innerHTML =
+                '<span class="produto-name">' + product.name + '</span>' +
+                '<label class="custom-checkbox">' +
+                    '<input type="checkbox" name="' + inputName + '" ' + (value ? 'checked' : '') + '>' +
+                    '<span class="check-box"></span>' +
+                '</label>';
 
-            const checkbox = productDiv.querySelector('input[type="checkbox"]');
+            const checkbox = div.querySelector('input[type="checkbox"]');
             checkbox.addEventListener('change', () => {
                 if (checkbox.checked) {
                     userSelections[inputName] = true;
-                    productDiv.classList.add('checked');
+                    div.classList.add('checked');
                 } else {
                     delete userSelections[inputName];
-                    productDiv.classList.remove('checked');
+                    div.classList.remove('checked');
                 }
-                updateCategoryBadge(categoryDiv, category, day);
+                updateCategoryBadge(sec, category, day);
                 updateProgress();
             });
         }
 
-        body.appendChild(productDiv);
+        body.appendChild(div);
     });
 
-    productList.appendChild(categoryDiv);
+    productList.appendChild(sec);
 }
 
-// --- Contar selecionados em uma categoria
-function countSelected(category, day) {
-    return category.products.filter(p => {
-        const v = userSelections[`${day}_${p.name}`];
-        return p.requiresQuantity ? Number(v) > 0 : v === true;
-    }).length;
-}
-
-// --- Atualizar badge da categoria
-function updateCategoryBadge(categoryDiv, category, day) {
-    const badge = categoryDiv.querySelector('.categoria-badge');
+// --- Badge da categoria
+function updateCategoryBadge(sec, category, day) {
+    const badge = sec.querySelector('.categoria-badge');
     const n = countSelected(category, day);
-    badge.textContent = `${n}/${category.products.length}`;
+    badge.textContent = n + '/' + category.products.length;
     badge.classList.toggle('has-items', n > 0);
 }
 
-// --- Progresso geral
+// --- Progresso
 function updateProgress() {
-    const day = daySelector.value;
-    const all = [...(productsByDay[day] || []), ...commonCategories];
-
+    const day  = daySelector.value;
+    const cats = [...(productsByDay[day] || []), ...commonCategories];
     let total = 0, selected = 0;
-    all.forEach(cat => {
+
+    cats.forEach(cat => {
         cat.products.forEach(p => {
             total++;
-            const v = userSelections[`${day}_${p.name}`];
+            const v = userSelections[day + '_' + p.name];
             if (p.requiresQuantity && Number(v) > 0) selected++;
-            if (p.requiresCheck && v === true) selected++;
+            if (p.requiresCheck   && v === true)     selected++;
         });
     });
 
     const pct = total === 0 ? 0 : Math.round((selected / total) * 100);
-    if (progressLabel) progressLabel.textContent = `${selected} de ${total} itens`;
-    if (progressBarFill) progressBarFill.style.width = `${pct}%`;
+    if (progressLabel)   progressLabel.textContent     = selected + ' de ' + total + ' itens';
+    if (progressBarFill) progressBarFill.style.width   = pct + '%';
 }
 
 // --- Gerar Relatório
@@ -541,37 +500,19 @@ function buildReport() {
     const dateStr = now.toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
     const timeStr = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
-    let report = `📋 Lista de Compras — ${day}\n📅 ${dateStr} às ${timeStr}\n\n`;
+    let report = '📋 Lista de Compras — ' + day + '\n📅 ' + dateStr + ' às ' + timeStr + '\n\n';
 
-    const emojiMap = {
-        "Carnes 🥩": "🥩",
-        "Braguini 🥬": "🥬",
-        "Águia Frios 🦅": "🦅",
-        "PMG — Frios 🧀": "🧀",
-        "Pães 🥖": "🥖",
-        "Gelo 🧊": "🧊",
-        "Descartáveis 📦": "📦",
-        "Vegetarianos 🌱": "🌱",
-        "Sorvetes 🍦": "🍦",
-        "Sobremesas 🍮": "🍮",
-        "Chopp 🍺": "🍺",
-        "Mercado Geral 🛍️": "🛍️",
-        "Limpeza 🧹": "🧹",
-        "Outros Fornecedores 📋": "📋",
-        "Bebidas — Alex 🍹": "🍹"
-    };
+    const cats = [...(productsByDay[day] || []), ...commonCategories];
 
-    const allCats = [...(productsByDay[day] || []), ...commonCategories];
-
-    allCats.forEach(cat => {
+    cats.forEach(cat => {
         const lines = [];
         cat.products.forEach(p => {
-            const v = userSelections[`${day}_${p.name}`];
-            if (p.requiresQuantity && Number(v) > 0) lines.push(`• ${p.name}: ${v}`);
-            else if (p.requiresCheck && v === true) lines.push(`• ${p.name} ✓`);
+            const v = userSelections[day + '_' + p.name];
+            if (p.requiresQuantity && Number(v) > 0) lines.push('• ' + p.name + ': ' + v);
+            else if (p.requiresCheck && v === true)  lines.push('• ' + p.name + ' ✓');
         });
         if (lines.length > 0) {
-            report += `${emojiMap[cat.category] || '▪'} *${cat.category}*\n`;
+            report += '*' + cat.category + '*\n';
             report += lines.join('\n') + '\n\n';
         }
     });
@@ -587,53 +528,50 @@ if (generateReportBtn) {
 }
 
 // --- Modal
-function openReportModal()  { reportModal && reportModal.classList.remove('hidden'); }
-function closeReportModal() { reportModal && reportModal.classList.add('hidden'); }
+function openReportModal()  { if (reportModal) reportModal.classList.remove('hidden'); }
+function closeReportModal() { if (reportModal) reportModal.classList.add('hidden'); }
 
-if (closeModalBtn)  closeModalBtn.onclick  = closeReportModal;
-if (modalOverlay)   modalOverlay.onclick   = closeReportModal;
+if (closeModalBtn) closeModalBtn.onclick = closeReportModal;
+if (modalOverlay)  modalOverlay.onclick  = closeReportModal;
 
-// --- Copiar Relatório
+// --- Copiar
 if (copyReportBtn) {
     copyReportBtn.onclick = () => {
         if (!reportTextArea.value) { showToast('Gere o relatório primeiro!', 'var(--danger)'); return; }
         navigator.clipboard.writeText(reportTextArea.value)
-            .then(() => showToast('✓ Relatório copiado!'))
+            .then(() => showToast('✓ Copiado!'))
             .catch(() => showToast('Erro ao copiar.', 'var(--danger)'));
     };
 }
 
-// --- Compartilhar no WhatsApp
+// --- WhatsApp
 const whatsappBtn = document.getElementById('whatsapp-report');
 if (whatsappBtn) {
     whatsappBtn.onclick = () => {
-        const text = reportTextArea.value || buildReport();
+        const text = reportTextArea.value;
         if (!text || text === 'Nenhum produto selecionado!') {
             showToast('Nenhum item selecionado!', 'var(--danger)');
             return;
         }
-        const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
-        window.open(url, '_blank');
+        window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
     };
 }
 
-// --- Colapsar / Expandir todos
+// --- Recolher / Expandir
 const toggleAllBtn = document.getElementById('toggle-all');
 if (toggleAllBtn) {
     let collapsed = false;
     toggleAllBtn.onclick = () => {
         collapsed = !collapsed;
-        document.querySelectorAll('.categoria').forEach(el => {
-            el.classList.toggle('collapsed', collapsed);
-        });
+        document.querySelectorAll('.categoria').forEach(el => el.classList.toggle('collapsed', collapsed));
         toggleAllBtn.textContent = collapsed ? '⊕ Expandir' : '⊖ Recolher';
     };
 }
 
-// --- Limpar seleções
+// --- Limpar
 if (clearSelectionBtn) {
     clearSelectionBtn.onclick = () => {
-        if (!confirm('Limpar TODAS as seleções deste uso?')) return;
+        if (!confirm('Limpar TODAS as seleções?')) return;
         Object.keys(userSelections).forEach(k => delete userSelections[k]);
         renderProducts(daySelector.value);
         if (reportTextArea) reportTextArea.value = '';
