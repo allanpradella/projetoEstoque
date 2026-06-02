@@ -356,7 +356,12 @@ function showPanel(name) {
         name === 'history' ? 'Histórico de Pedidos' :
         name === 'admin'   ? 'Administração'         : 'Pedidos do Dia';
     if (name === 'history') renderHistory();
-    if (name === 'admin')   renderAdmin();
+    if (name === 'admin')   renderAdmin()
+        '<div class="admin-section">' +
+    '<div class="admin-section-header"><h2>Usuários</h2>' +
+        '<button class="btn-primary btn-sm" onclick="openCreateUserModal()">+ Novo Usuário</button></div>' +
+    '<div id="admin-user-list"></div>' +
+'</div>';;
 }
 
 document.getElementById('btn-history').onclick      = () => showPanel('history');
@@ -637,7 +642,8 @@ function renderAdmin() {
             '<div id="admin-prod-list"></div>' +
         '</div>' +
         '<div class="admin-section">' +
-            '<div class="admin-section-header"><h2>Usuários</h2></div>' +
+            '<div class="admin-section-header"><h2>Usuários</h2>' +
+                '<button class="btn-primary btn-sm" onclick="openCreateUserModal()">+ Novo Usuário</button></div>' +
             '<div id="admin-user-list"></div>' +
         '</div>';
 
