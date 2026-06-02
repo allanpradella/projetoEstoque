@@ -3,87 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Burger — Estoque</title>
+    <title>The Burger — Pedidos</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- LOGIN -->
-    <div id="login-screen">
-        <div id="login-card">
-            <img src="logo.png" alt="The Burger Logo" id="login-logo">
-            <p id="login-subtitle">SISTEMA DE ESTOQUE</p>
-            <div class="input-group">
-                <span class="input-icon">👤</span>
-                <input type="text" id="username" placeholder="Usuário" autocomplete="username">
+<!-- LOGIN -->
+<div id="screen-login">
+    <div id="login-card">
+        <img src="logo.png" alt="The Burger" id="login-logo">
+        <p id="login-subtitle">SISTEMA DE PEDIDOS</p>
+        <div class="input-group">
+            <span class="input-icon">✉️</span>
+            <input type="email" id="login-email" placeholder="E-mail" autocomplete="email">
+        </div>
+        <div class="input-group">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="login-password" placeholder="Senha" autocomplete="current-password">
+        </div>
+        <p id="login-error">E-mail ou senha inválidos.</p>
+        <button id="login-btn">ENTRAR</button>
+        <button id="reset-password-btn" class="btn-link">Esqueci minha senha</button>
+    </div>
+</div>
+
+<!-- APP -->
+<div id="screen-app" style="display:none;">
+
+    <!-- HEADER -->
+    <header id="app-header">
+        <div id="header-left">
+            <img src="logo.png" alt="Logo" id="header-logo">
+            <div id="header-title">
+                <span id="header-view-name" style="cursor:pointer;">Pedidos do Dia</span>
+                <small id="logged-user"></small>
             </div>
-            <div class="input-group">
-                <span class="input-icon">🔒</span>
-                <input type="password" id="password" placeholder="Senha" autocomplete="current-password">
+        </div>
+        <div id="header-center">
+            <div id="progress-wrap">
+                <span id="progress-label">0 itens</span>
+                <div id="progress-bar-track">
+                    <div id="progress-bar-fill"></div>
+                </div>
             </div>
-            <p id="login-error">Usuário ou senha inválidos!</p>
-            <button id="login-btn">ENTRAR</button>
+        </div>
+        <div id="header-right">
+            <select id="daySelector"></select>
+            <button id="btn-toggle-all" class="btn-header-icon" title="Recolher/Expandir">⊖</button>
+            <button id="btn-history"   class="btn-header-icon" title="Histórico">📜</button>
+            <button id="btn-admin"     class="btn-header-icon hidden" title="Administração">⚙️</button>
+            <button id="logout-btn"    class="btn-header-icon btn-danger-icon" title="Sair">⎋</button>
+        </div>
+    </header>
+
+    <!-- CHECKLIST -->
+    <main id="panel-checklist">
+        <div id="product-list"></div>
+    </main>
+
+    <!-- HISTÓRICO -->
+    <main id="panel-history" style="display:none;">
+        <div id="history-list"></div>
+    </main>
+
+    <!-- ADMIN -->
+    <main id="panel-admin" style="display:none;">
+        <div id="admin-content"></div>
+    </main>
+
+    <!-- FOOTER -->
+    <div id="footer-actions">
+        <button id="clear-selection" class="btn-secondary">🗑 Limpar</button>
+        <button id="generate-report" class="btn-primary">📋 Gerar Pedido</button>
+    </div>
+
+    <!-- MODAL RELATÓRIO -->
+    <div id="report-modal" class="modal hidden">
+        <div class="modal-overlay" id="modal-overlay"></div>
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>📋 Pedido de Compras</h3>
+                <button class="modal-close" id="close-modal">✕</button>
+            </div>
+            <textarea id="report" readonly></textarea>
+            <div class="modal-actions">
+                <button id="copy-report"     class="btn-primary">📋 Copiar</button>
+                <button id="whatsapp-report" class="btn-whatsapp">📲 WhatsApp</button>
+            </div>
         </div>
     </div>
 
-    <!-- APP -->
-    <div id="app" style="display:none;">
-
-        <!-- HEADER -->
-        <header id="app-header">
-            <div id="header-left">
-                <img src="logo.png" alt="Logo" id="header-logo">
-                <div id="header-title">
-                    <span>Lista de Compras</span>
-                    <small id="logged-user"></small>
+    <!-- MODAL CATEGORIA -->
+    <div id="modal-category" class="modal hidden">
+        <div class="modal-overlay" onclick="closeModal('modal-category')"></div>
+        <div class="modal-box modal-small">
+            <div class="modal-header">
+                <h3 id="modal-category-title">Nova Categoria</h3>
+                <button class="modal-close" onclick="closeModal('modal-category')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Nome da Categoria</label>
+                    <input type="text" id="cat-name" placeholder="Ex: Carnes 🥩">
+                </div>
+                <div class="form-group">
+                    <label>Aparece nos dias</label>
+                    <div id="cat-days" class="days-checkboxes"></div>
                 </div>
             </div>
-            <div id="header-center">
-                <div id="progress-wrap">
-                    <span id="progress-label">0 itens</span>
-                    <div id="progress-bar-track">
-                        <div id="progress-bar-fill"></div>
-                    </div>
-                </div>
-            </div>
-            <div id="header-right">
-                <select id="daySelector"></select>
-                <button id="toggle-all" class="btn-secondary" style="padding:8px 14px;font-size:12px;">⊖ Recolher</button>
-                <button id="logout-btn">⎋ Sair</button>
-            </div>
-        </header>
-
-        <!-- MAIN -->
-        <main id="main-content">
-            <div id="product-list"></div>
-        </main>
-
-        <!-- FOOTER ACTIONS -->
-        <div id="footer-actions">
-            <button id="clear-selection" class="btn-secondary">🗑 Limpar</button>
-            <button id="generate-report" class="btn-primary">📋 Gerar Relatório</button>
-        </div>
-
-        <!-- REPORT MODAL -->
-        <div id="report-modal" class="modal hidden">
-            <div class="modal-overlay" id="modal-overlay"></div>
-            <div class="modal-box">
-                <div class="modal-header">
-                    <h3>📋 Relatório de Compras</h3>
-                    <button class="modal-close" id="close-modal">✕</button>
-                </div>
-                <textarea id="report" readonly placeholder="Gerando relatório..."></textarea>
-                <div class="modal-actions">
-                    <button id="copy-report" class="btn-primary">📋 Copiar</button>
-                    <button id="whatsapp-report" class="btn-whatsapp">📲 WhatsApp</button>
-                </div>
+            <div class="modal-actions">
+                <button id="cat-delete-btn" class="btn-danger hidden">🗑 Excluir</button>
+                <button id="cat-save-btn"   class="btn-primary">💾 Salvar</button>
             </div>
         </div>
-
     </div>
 
-    <div id="toast"></div>
-    <script src="script.js"></script>
+    <!-- MODAL PRODUTO -->
+    <div id="modal-product" class="modal hidden">
+        <div class="modal-overlay" onclick="closeModal('modal-product')"></div>
+        <div class="modal-box modal-small">
+            <div class="modal-header">
+                <h3 id="modal-product-title">Novo Item</h3>
+                <button class="modal-close" onclick="closeModal('modal-product')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Nome do Item</label>
+                    <input type="text" id="prod-name" placeholder="Ex: Tradicional">
+                </div>
+                <div class="form-group">
+                    <label>Categoria</label>
+                    <select id="prod-category"></select>
+                </div>
+                <div class="form-group">
+                    <label>Tipo de entrada</label>
+                    <select id="prod-type">
+                        <option value="quantity">Quantidade (número)</option>
+                        <option value="check">Verificação (✓ check)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button id="prod-delete-btn" class="btn-danger hidden">🗑 Excluir</button>
+                <button id="prod-save-btn"   class="btn-primary">💾 Salvar</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="toast"></div>
+<div id="loading-overlay"><div class="spinner"></div></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
