@@ -632,12 +632,30 @@ button {
     padding: 16px 24px;
     border-top: 1px solid var(--border);
     flex-shrink: 0;
+    display: flex;
+    gap: 10px;
 }
 
 .modal-actions button {
-    width: 100%;
+    flex: 1;
     padding: 13px;
     font-size: 14px;
+}
+
+.btn-whatsapp {
+    background: #25D366;
+    color: #fff;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    letter-spacing: 1px;
+    border: none;
+    border-radius: var(--radius);
+}
+
+.btn-whatsapp:hover {
+    background: #1ebe5d;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(37,211,102,0.3);
 }
 
 /* ===== TOAST ===== */
