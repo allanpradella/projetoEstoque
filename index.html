@@ -49,6 +49,7 @@
             </div>
             <div id="header-right">
                 <select id="daySelector"></select>
+                <button id="toggle-all" class="btn-secondary" style="padding:8px 14px;font-size:12px;">⊖ Recolher</button>
                 <button id="logout-btn">⎋ Sair</button>
             </div>
         </header>
@@ -74,13 +75,15 @@
                 </div>
                 <textarea id="report" readonly placeholder="Gerando relatório..."></textarea>
                 <div class="modal-actions">
-                    <button id="copy-report" class="btn-primary">📋 Copiar Relatório</button>
+                    <button id="copy-report" class="btn-primary">📋 Copiar</button>
+                    <button id="whatsapp-report" class="btn-whatsapp">📲 WhatsApp</button>
                 </div>
             </div>
         </div>
 
     </div>
 
+    <div id="toast"></div>
     <script src="script.js"></script>
 </body>
 </html>
