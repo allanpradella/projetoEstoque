@@ -523,6 +523,32 @@ document.getElementById('clear-selection').onclick = () => {
     renderChecklist();
 };
 
+auth.onAuthStateChanged(async user => {
+    try {
+        if (user) {
+            currentUser = user;
+            await loadUserProfile(user.uid);
+            document.getElementById('screen-login').style.display = 'none';
+            document.getElementById('screen-app').style.display   = 'block';
+            document.getElementById('logged-user').textContent    = user.displayName || user.email;
+            if (currentRole === 'admin') document.getElementById('btn-admin').classList.remove('hidden');
+            await loadData();
+            showPanel('checklist');
+            populateDaySelector();
+        } else {
+            currentUser = null;
+            currentRole = 'user';
+            document.getElementById('screen-login').style.display = 'flex';
+            document.getElementById('screen-app').style.display   = 'none';
+        }
+    } catch(e) {
+        console.error('Erro na inicialização:', e);
+        showToast('Erro de conexão. Verifique o console.', 'error');
+    } finally {
+        setLoading(false);
+    }
+});
+
 // ============================================================
 // GERAR RELATÓRIO
 // ============================================================
