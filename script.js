@@ -14,6 +14,57 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db   = firebase.firestore();
 
+// Instância secundária para criar usuários sem deslogar o admin
+const secondaryApp  = firebase.initializeApp(firebaseConfig, 'Secondary');
+const secondaryAuth = secondaryApp.auth();
+
+function openCreateUserModal() {
+    document.getElementById('new-user-name').value     = '';
+    document.getElementById('new-user-email').value    = '';
+    document.getElementById('new-user-password').value = '';
+    document.getElementById('new-user-role').value     = 'user';
+    document.getElementById('modal-user').classList.remove('hidden');
+    document.getElementById('new-user-name').focus();
+}
+
+document.getElementById('create-user-btn').onclick = async () => {
+    const name     = document.getElementById('new-user-name').value.trim();
+    const email    = document.getElementById('new-user-email').value.trim();
+    const password = document.getElementById('new-user-password').value;
+    const role     = document.getElementById('new-user-role').value;
+
+    if (!name)            { showToast('Informe o nome.', 'warn');            return; }
+    if (!email)           { showToast('Informe o e-mail.', 'warn');          return; }
+    if (password.length < 6) { showToast('Senha mínima de 6 caracteres.', 'warn'); return; }
+
+    setLoading(true);
+    try {
+        // Cria o usuário sem deslogar o admin atual
+        const credential = await secondaryAuth.createUserWithEmailAndPassword(email, password);
+        const uid = credential.user.uid;
+
+        await credential.user.updateProfile({ displayName: name });
+        await secondaryAuth.signOut();
+
+        // Salva o perfil no Firestore
+        await db.collection('users').doc(uid).set({
+            name, email, role,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            createdBy: currentUser.uid
+        });
+
+        closeModal('modal-user');
+        renderAdminUsers();
+        showToast('Usuário ' + name + ' criado com sucesso!');
+    } catch(e) {
+        if (e.code === 'auth/email-already-in-use') showToast('E-mail já cadastrado.', 'error');
+        else if (e.code === 'auth/invalid-email')   showToast('E-mail inválido.', 'error');
+        else showToast('Erro ao criar usuário.', 'error');
+        console.error(e);
+    }
+    setLoading(false);
+};
+
 // ============================================================
 // ESTADO GLOBAL
 // ============================================================
